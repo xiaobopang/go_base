@@ -20,3 +20,4 @@ manifest/output/
 temp/
 logs/
 /http-api-*
+config.yaml

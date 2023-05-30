@@ -87,7 +87,7 @@ database:
 
   default:
     link: "mysql:root:pxb@tcp(127.0.0.1:3366)/gf-test?loc=Local&parseTime=true"
-    debug: true # 默认 false
+    debug: false # 默认 false
     charset: "utf8mb4" #数据库编码(如: utf8/gbk/gb2312)，一般设置为utf8
     dryRun: false #ORM空跑(只读不写)
     maxIdle: 10 #连接池最大闲置的连接数

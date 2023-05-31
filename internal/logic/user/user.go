@@ -48,7 +48,7 @@ func (s *sUser) Create(ctx context.Context, in model.UserCreateInput) (*model.Us
 }
 
 func (s *sUser) Update(ctx context.Context, in model.UserUpdateInput) error {
-	_, err := dao.User.Ctx(ctx).OmitEmpty().Fields("nickname", "age", "gender").Data(in).Where(do.Demo{
+	_, err := dao.User.Ctx(ctx).Fields("nickname", "age", "gender").Data(in).Where(do.Demo{
 		Id: in.Id,
 	}).Update()
 	if err != nil {

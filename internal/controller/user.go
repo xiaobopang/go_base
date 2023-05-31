@@ -18,7 +18,7 @@ var (
 type cUser struct{}
 
 func (c *cUser) Get(ctx context.Context, req *v1.UserGetReq) (*v1.UserGetRes, error) {
-	userInfo, err := service.User().Get(ctx, req.Id)
+	userInfo, err := service.User().Get(ctx, req)
 	if err != nil {
 		return nil, err
 	}
@@ -38,6 +38,17 @@ func (c *cUser) Get(ctx context.Context, req *v1.UserGetReq) (*v1.UserGetRes, er
 	}, nil
 }
 
+func (c *cUser) Update(ctx context.Context, req *v1.UserUpdateReq) (*v1.UserUpdateRes, error) {
+	data := model.UserUpdateInput{
+		Id:       req.Id,
+		Nickname: req.Nickname,
+		Age:      req.Age,
+		Gender:   req.Gender,
+	}
+	err := service.User().Update(ctx, data)
+
+	return nil, err
+}
 func (c *cUser) Create(ctx context.Context, req *v1.UserCreateReq) (*v1.UserCreateRes, error) {
 	data := model.UserCreateInput{
 		Nickname: req.Nickname,
@@ -54,10 +65,17 @@ func (c *cUser) Create(ctx context.Context, req *v1.UserCreateReq) (*v1.UserCrea
 }
 
 func (c *cUser) GetList(ctx context.Context, req *v1.UserListReq) (*v1.UserListRes, error) {
-	res, err := service.User().List(ctx, model.UserListInput{
-		PageNum:  req.PageNum,
-		PageSize: req.PageSize,
-	})
+	where := model.UserListInput{
+		Page: req.Page,
+		Size: req.Size,
+	}
+	if req.Id > 0 {
+		where.Id = req.Id
+	}
+	if req.Nickname != "" {
+		where.Nickname = req.Nickname
+	}
+	res, err := service.User().List(ctx, where)
 	if err != nil {
 		return nil, err
 	}
@@ -69,9 +87,9 @@ func (c *cUser) GetList(ctx context.Context, req *v1.UserListReq) (*v1.UserListR
 
 	return &v1.UserListRes{
 		CommonPaginationRes: v1.CommonPaginationRes{
-			Total:    res.Total,
-			PageNum:  res.PageNum,
-			PageSize: res.PageSize,
+			Total: res.Total,
+			Page:  res.Page,
+			Size:  res.Size,
 		},
 		List: list,
 	}, nil

@@ -70,8 +70,8 @@ func (c *cDemo) Delete(ctx context.Context, req *v1.DemoDeleteReq) (*v1.DemoDele
 
 func (c *cDemo) List(ctx context.Context, req *v1.DemoListReq) (*v1.DemoListRes, error) {
 	res, err := service.Demo().List(ctx, model.DemoListInput{
-		PageNum:  req.PageNum,
-		PageSize: req.PageSize,
+		Page: req.Page,
+		Size: req.Size,
 	})
 	if err != nil {
 		return nil, err
@@ -85,9 +85,9 @@ func (c *cDemo) List(ctx context.Context, req *v1.DemoListReq) (*v1.DemoListRes,
 
 	return &v1.DemoListRes{
 		CommonPaginationRes: v1.CommonPaginationRes{
-			Total:    res.Total,
-			PageNum:  res.PageNum,
-			PageSize: res.PageSize,
+			Total: res.Total,
+			Page:  res.Page,
+			Size:  res.Size,
 		},
 		List: list,
 	}, nil

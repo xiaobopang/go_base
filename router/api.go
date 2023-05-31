@@ -11,10 +11,10 @@ func Api(ctx context.Context, group *ghttp.RouterGroup) {
 	//绑定路由
 	group.Bind(
 		controller.User,
-		//controller.Demo,
 	)
 	//自定义路由
 	group.GET("/demo/:fielda", controller.Demo.Get)
 	group.POST("/demo", controller.Demo.Create)
+	group.PUT("/demo/:id", controller.Demo.Update)
 	group.DELETE("/demo/:id", controller.Demo.Delete)
 }

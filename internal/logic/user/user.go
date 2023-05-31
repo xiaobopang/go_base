@@ -2,6 +2,7 @@ package user
 
 import (
 	"context"
+	v1 "go-base/api/v1"
 	"go-base/internal/dao"
 	"go-base/internal/model"
 	"go-base/internal/model/do"
@@ -19,10 +20,8 @@ func New() *sUser {
 	return &sUser{}
 }
 
-func (s *sUser) Get(ctx context.Context, id uint) (*entity.User, error) {
-	userInfo, err := dao.User.Ctx(ctx).Where(do.User{
-		Id: id,
-	}).One()
+func (s *sUser) Get(ctx context.Context, req *v1.UserGetReq) (*entity.User, error) {
+	userInfo, err := dao.User.Ctx(ctx).Where("id=?", req.Id).One()
 	if err != nil {
 		return nil, err
 	}
@@ -48,23 +47,40 @@ func (s *sUser) Create(ctx context.Context, in model.UserCreateInput) (*model.Us
 	}, nil
 }
 
-func (s *sUser) List(ctx context.Context, in model.UserListInput) (*model.UserListOutput, error) {
-	m := dao.User.Ctx(ctx)
-	out := &model.UserListOutput{
-		PageSize: in.PageSize,
-		PageNum:  in.PageNum,
+func (s *sUser) Update(ctx context.Context, in model.UserUpdateInput) error {
+	_, err := dao.User.Ctx(ctx).OmitEmpty().Fields("nickname", "age", "gender").Data(in).Where(do.Demo{
+		Id: in.Id,
+	}).Update()
+	if err != nil {
+		return err
 	}
-	listModel := m.Page(in.PageNum, in.PageSize)
 
-	listModel = listModel.OrderDesc(dao.User.Columns().UpdatedAt)
+	return nil
+}
+func (s *sUser) List(ctx context.Context, in model.UserListInput) (*model.UserListOutput, error) {
+	out := &model.UserListOutput{
+		Page: in.Page,
+		Size: in.Size,
+	}
 
-	if err := listModel.Scan(&out.List); err != nil {
+	listModel := dao.User.Ctx(ctx)
+
+	if in.Id > 0 {
+		listModel = listModel.Where("id=?", in.Id)
+	}
+
+	if in.Nickname != "" {
+		listModel = listModel.WhereLike("nickname", "%"+in.Nickname+"%")
+	}
+
+	if err := listModel.Page(in.Page, in.Size).OrderDesc(dao.User.Columns().UpdatedAt).Scan(&out.List); err != nil {
 		return nil, err
 	}
+
 	if len(out.List) == 0 {
 		return &model.UserListOutput{}, nil
 	}
-	count, err := m.Count()
+	count, err := listModel.Count()
 	if err != nil {
 		return nil, err
 	}

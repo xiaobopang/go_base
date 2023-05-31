@@ -21,15 +21,15 @@ type DemoUpdateOutput struct {
 }
 
 type DemoListInput struct {
-	PageNum  int
-	PageSize int
+	Page int
+	Size int
 }
 
 type DemoListOutput struct {
-	PageNum  int
-	PageSize int
-	Total    int
-	List     []DemoListOutputItem
+	Page  int
+	Size  int
+	Total int
+	List  []DemoListOutputItem
 }
 
 // DemoListOutputItem NOTE: 此处为了不返回Fieldb字段, 所以重新定义返回结构体, 否则可以直接使用enttity.Demo

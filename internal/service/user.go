@@ -7,13 +7,15 @@ package service
 
 import (
 	"context"
+	v1 "go-base/api/v1"
 	"go-base/internal/model"
 	"go-base/internal/model/entity"
 )
 
 type (
 	IUser interface {
-		Get(ctx context.Context, id uint) (*entity.User, error)
+		Get(ctx context.Context, req *v1.UserGetReq) (*entity.User, error)
+		Update(ctx context.Context, in model.UserUpdateInput) error
 		Create(ctx context.Context, in model.UserCreateInput) (*model.UserCreateOutput, error)
 		List(ctx context.Context, in model.UserListInput) (*model.UserListOutput, error)
 	}

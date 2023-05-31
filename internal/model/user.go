@@ -8,20 +8,29 @@ type UserCreateInput struct {
 	Gender   int
 }
 
+type UserUpdateInput struct {
+	Id       uint
+	Nickname string
+	Age      int
+	Gender   int
+}
+
 type UserCreateOutput struct {
 	ID uint
 }
 
 type UserListInput struct {
-	PageNum  int
-	PageSize int
+	Id       uint
+	Nickname string
+	Page     int
+	Size     int
 }
 
 type UserListOutput struct {
-	PageNum  int
-	PageSize int
-	Total    int
-	List     []UserListOutputItem
+	Page  int
+	Size  int
+	Total int
+	List  []UserListOutputItem
 }
 
 // DemoListOutputItem NOTE: 此处为了不返回Fieldb字段, 所以重新定义返回结构体, 否则可以直接使用enttity.Demo

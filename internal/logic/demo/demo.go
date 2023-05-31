@@ -109,11 +109,11 @@ func (s *sDemo) List(ctx context.Context, in model.DemoListInput) (*model.DemoLi
 	m := dao.Demo.Ctx(ctx)
 
 	out := &model.DemoListOutput{
-		PageNum:  in.PageNum,
-		PageSize: in.PageSize,
+		Page: in.Page,
+		Size: in.Size,
 	}
 
-	listModel := m.Page(in.PageNum, in.PageSize)
+	listModel := m.Page(in.Page, in.Size)
 
 	// 按照更新时间排序
 	listModel = listModel.OrderDesc(dao.Demo.Columns().UpdatedAt)

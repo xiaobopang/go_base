@@ -50,6 +50,7 @@ var (
 
 			s.Group("/api", func(group *ghttp.RouterGroup) {
 				group.Middleware(
+					service.Middleware().Cors,
 					service.Middleware().TraceID,
 					service.Middleware().ResponseHandler,
 					service.Middleware().AccessUser,

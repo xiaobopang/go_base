@@ -14,6 +14,7 @@ type (
 		AccessUser(r *ghttp.Request)
 		ResponseHandler(r *ghttp.Request)
 		TraceID(r *ghttp.Request)
+		Cors(r *ghttp.Request)
 	}
 )
 

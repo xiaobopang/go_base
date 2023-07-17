@@ -21,3 +21,4 @@ temp/
 logs/
 /http-api-*
 config.yaml
+go.sum
